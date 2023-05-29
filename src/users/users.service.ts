@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './user.entity';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { User } from '../entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -10,15 +12,38 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  async findAll() {
+    return await this.usersRepository.find();
   }
 
-  findOne(id: number): Promise<User | null> {
-    return this.usersRepository.findOneBy({ id });
+  async findOne(userId: number) {
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      return 1;
+    }
+    return user;
   }
 
-  async remove(id: number): Promise<void> {
-    await this.usersRepository.delete(id);
+  async create(createUserDto: CreateUserDto) {
+    const user = new User(createUserDto);
+    return await this.usersRepository.save(user);
+  }
+
+  async update(userId: number, updateUserDto: UpdateUserDto) {
+    const relationExist = await this.usersRepository.exist({
+      where: { id: userId },
+    });
+    if (!relationExist) {
+      return 1;
+    }
+    return await this.usersRepository.update(userId, updateUserDto);
+  }
+
+  async remove(userId: number) {
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      return 1;
+    }
+    return await this.usersRepository.remove(user);
   }
 }
