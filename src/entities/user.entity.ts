@@ -4,10 +4,10 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 @Entity({ name: 'users' })
 export class User {
   constructor(user: CreateUserDto) {
-    this.firstName = user.firstname;
-    this.lastName = user.lastname;
-    this.email = user.email;
-    this.password = user.password;
+    this.firstName = user?.firstName;
+    this.lastName = user?.lastName;
+    this.email = user?.email;
+    this.password = user?.password;
   }
 
   @PrimaryGeneratedColumn()

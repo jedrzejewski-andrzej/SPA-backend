@@ -16,10 +16,10 @@ export class UsersService {
     return await this.usersRepository.find();
   }
 
-  async findOne(userId: number) {
+  async findOne(userId: number): Promise<User | undefined> {
     const user = await this.usersRepository.findOne({ where: { id: userId } });
     if (!user) {
-      return 1;
+      return undefined;
     }
     return user;
   }

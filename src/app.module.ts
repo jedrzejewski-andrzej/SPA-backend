@@ -5,18 +5,20 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ENTITIES } from './entities';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
     AuthModule,
     UsersModule,
+    ProductsModule,
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       host: 'localhost',
-      port: 3306,
+      port: 5432,
       username: 'root',
       password: 'root',
-      database: 'test',
+      database: 'spa',
       entities: [...ENTITIES],
       synchronize: true,
     }),
