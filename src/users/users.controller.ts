@@ -7,7 +7,7 @@ import {
   HttpCode,
   Param,
   Patch,
-  Post,
+  Post, UseGuards
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,6 +15,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from '../entities/user.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -23,12 +24,14 @@ export class UsersController {
     private usersService: UsersService,
   ) {}
 
+  @UseGuards(AuthGuard)
   @HttpCode(204)
   @Post('create')
   async create(@Body() createUserDto: CreateUserDto) {
     return await this.usersService.create(createUserDto);
   }
 
+  @UseGuards(AuthGuard)
   @Get('get-all')
   async findAll() {
     return await this.usersService.findAll();
